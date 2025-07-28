@@ -4,12 +4,11 @@
  */
 
 import java.time.LocalDateTime;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -19,120 +18,30 @@ public class CitaMedicaTest {
     
     public CitaMedicaTest() {
     }
-
-    @org.junit.jupiter.api.BeforeAll
-    public static void setUpClass() throws Exception {
-    }
-
-    @org.junit.jupiter.api.AfterAll
-    public static void tearDownClass() throws Exception {
-    }
-
-    @org.junit.jupiter.api.BeforeEach
-    public void setUp() throws Exception {
-    }
-
-    @org.junit.jupiter.api.AfterEach
-    public void tearDown() throws Exception {
-    }
-    
-    @BeforeAll
-    public static void setUpClass() {
-    }
-    
-    @AfterAll
-    public static void tearDownClass() {
-    }
-    
-    @BeforeEach
-    public void setUp() {
-    }
-    
-    @AfterEach
-    public void tearDown() {
-    }
-
-    /**
-     * Test of getPaciente method, of class CitaMedica.
-     */
-    @org.junit.jupiter.api.Test
-    public void testGetPaciente() {
-        System.out.println("getPaciente");
-        CitaMedica instance = null;
-        Paciente expResult = null;
-        Paciente result = instance.getPaciente();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getMedico method, of class CitaMedica.
-     */
-    @org.junit.jupiter.api.Test
-    public void testGetMedico() {
-        System.out.println("getMedico");
-        CitaMedica instance = null;
-        Medico expResult = null;
-        Medico result = instance.getMedico();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getFechaHora method, of class CitaMedica.
-     */
-    @org.junit.jupiter.api.Test
-    public void testGetFechaHora() {
-        System.out.println("getFechaHora");
-        CitaMedica instance = null;
-        LocalDateTime expResult = null;
-        LocalDateTime result = instance.getFechaHora();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getEstado method, of class CitaMedica.
-     */
-    @org.junit.jupiter.api.Test
-    public void testGetEstado() {
-        System.out.println("getEstado");
-        CitaMedica instance = null;
-        String expResult = "";
-        String result = instance.getEstado();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setEstado method, of class CitaMedica.
-     */
-    @org.junit.jupiter.api.Test
-    public void testSetEstado() {
-        System.out.println("setEstado");
-        String estado = "";
-        CitaMedica instance = null;
-        instance.setEstado(estado);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of toString method, of class CitaMedica.
-     */
-    @org.junit.jupiter.api.Test
+    @Test
     public void testToString() {
-        System.out.println("toString");
-        CitaMedica instance = null;
-        String expResult = "";
-        String result = instance.toString();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Paciente paciente = new Paciente("123", "Juan Perez", "juan@mail.com");
+        Medico medico = new Medico("Dra. Gomez", "Cardiología");
+        LocalDateTime fechaHora = LocalDateTime.of(2025, 7, 28, 10, 0);
+        CitaMedica cita = new CitaMedica(paciente, medico, fechaHora);
+
+        String result = cita.toString();
+        assertNotNull(result);
+        assertTrue(result.contains("Juan Perez"));
+        assertTrue(result.contains("Dra. Gomez"));
+        assertTrue(result.contains("Cardiología"));
+        assertTrue(result.contains("2025"));
+        assertTrue(result.contains("Agendada"));
     }
-    
+
+    @Test
+    public void testSetEstado() {
+        Paciente paciente = new Paciente("123", "Juan Perez", "juan@mail.com");
+        Medico medico = new Medico("Dra. Gomez", "Cardiología");
+        LocalDateTime fechaHora = LocalDateTime.of(2025, 7, 28, 10, 0);
+        CitaMedica cita = new CitaMedica(paciente, medico, fechaHora);
+
+        cita.setEstado(null);
+        assertNull(cita.getEstado());
+    }
 }
