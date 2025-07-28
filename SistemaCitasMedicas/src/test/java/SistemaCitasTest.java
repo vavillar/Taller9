@@ -11,115 +11,65 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- *
- * @author CltControl
- */
+
 public class SistemaCitasTest {
-    
-    public SistemaCitasTest() {
-    }
-    
-    @BeforeAll
-    public static void setUpClass() {
-    }
-    
-    @AfterAll
-    public static void tearDownClass() {
-    }
-    
+
+    private SistemaCitas sistema;
+
     @BeforeEach
     public void setUp() {
-    }
-    
-    @AfterEach
-    public void tearDown() {
+        sistema = new SistemaCitas();
     }
 
-    /**
-     * Test of registrarPaciente method, of class SistemaCitas.
-     */
+    // SC1 - registrarPaciente
     @Test
     public void testRegistrarPaciente() {
-        System.out.println("registrarPaciente");
-        String cedula = "";
-        String nombre = "";
-        String correo = "";
-        SistemaCitas instance = new SistemaCitas();
-        instance.registrarPaciente(cedula, nombre, correo);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        sistema.registrarPaciente("123", "Juan", "juan@mail.com");
+        // Verificamos que se pueda agendar cita (solo posible si existe el paciente)
+        sistema.registrarMedico("Dra. Ana", "Cardiología");
+        sistema.agendarCita("123", "Cardiología", LocalDateTime.now());
+        sistema.verHistorial("123"); 
     }
 
-    /**
-     * Test of registrarMedico method, of class SistemaCitas.
-     */
+    // SC2 - agendarCita con paciente inexistente
     @Test
-    public void testRegistrarMedico() {
-        System.out.println("registrarMedico");
-        String nombre = "";
-        String especialidad = "";
-        SistemaCitas instance = new SistemaCitas();
-        instance.registrarMedico(nombre, especialidad);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testAgendarCitaPacienteInexistente() {
+        sistema.registrarMedico("Dr. Luis", "Pediatría");
+        sistema.agendarCita("999", "Pediatría", LocalDateTime.now());
+        // No se agrega cita si paciente no existe
+        sistema.verHistorial("999"); 
     }
 
-    /**
-     * Test of agendarCita method, of class SistemaCitas.
-     */
+    // SC3 - solicitarExamen con paciente válido
     @Test
-    public void testAgendarCita() {
-        System.out.println("agendarCita");
-        String cedulaPaciente = "";
-        String especialidad = "";
-        LocalDateTime fechaHora = null;
-        SistemaCitas instance = new SistemaCitas();
-        instance.agendarCita(cedulaPaciente, especialidad, fechaHora);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testSolicitarExamenPacienteValido() {
+        sistema.registrarPaciente("456", "Ana", "ana@mail.com");
+        sistema.solicitarExamen("456", "Sangre");
+        sistema.verHistorial("456"); // Debería imprimir el examen
     }
 
-    /**
-     * Test of solicitarExamen method, of class SistemaCitas.
-     */
+    // SC4 - registrarResultado con paciente no registrado
     @Test
-    public void testSolicitarExamen() {
-        System.out.println("solicitarExamen");
-        String cedulaPaciente = "";
-        String tipoExamen = "";
-        SistemaCitas instance = new SistemaCitas();
-        instance.solicitarExamen(cedulaPaciente, tipoExamen);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testRegistrarResultadoPacienteNoRegistrado() {
+        sistema.solicitarExamen("888", "Orina"); 
+        sistema.registrarResultado("888", "Orina", "Normal"); 
+        sistema.verHistorial("888"); //
     }
 
-    /**
-     * Test of registrarResultado method, of class SistemaCitas.
-     */
-    @Test
-    public void testRegistrarResultado() {
-        System.out.println("registrarResultado");
-        String cedulaPaciente = "";
-        String tipoExamen = "";
-        String resultado = "";
-        SistemaCitas instance = new SistemaCitas();
-        instance.registrarResultado(cedulaPaciente, tipoExamen, resultado);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of verHistorial method, of class SistemaCitas.
-     */
+    // SC5 - verHistorial con y sin historial
     @Test
     public void testVerHistorial() {
-        System.out.println("verHistorial");
-        String cedulaPaciente = "";
-        SistemaCitas instance = new SistemaCitas();
-        instance.verHistorial(cedulaPaciente);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        sistema.registrarPaciente("111", "Carlos", "carlos@mail.com");
+        sistema.registrarMedico("Dra. Luz", "Dermatología");
+        sistema.agendarCita("111", "Dermatología", LocalDateTime.now());
+        sistema.solicitarExamen("111", "Piel");
+        sistema.registrarResultado("111", "Piel", "Sin anomalías");
+
+        System.out.println("Historial con datos:");
+        sistema.verHistorial("111"); // Debería imprimir cita y examen con resultado
+
+        sistema.registrarPaciente("222", "Lucía", "lucia@mail.com");
+        System.out.println("Historial sin datos:");
+        sistema.verHistorial("222"); // No debería imprimir nada
     }
-    
 }
